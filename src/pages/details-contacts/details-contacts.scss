@@ -1,0 +1,53 @@
+.details-contacts {
+
+    div.item {
+        
+    /* To correctly align image, regardless of content height: */
+    vertical-align: top;
+    display: inline-block;
+    /* To horizontally center images and caption */
+    text-align: center;
+    /* The width of the container also implies margin around the images. */
+    width: auto;
+    margin-right: 5px; 
+}
+
+.caption {
+    /* Make the caption a block so it occupies its own line. */
+    font-size: 10px;
+    display: block;
+}
+
+    .texto {
+        padding-top: 10px;
+        float: left
+    }
+
+    .botoes {
+    
+        float: right;
+    }
+
+    @media only screen 
+and (min-device-width : 320px) 
+and (max-device-width : 480px) { 
+
+  ion-item   {
+      
+        padding-left: 7px;
+
+    }
+
+   ion-item  item-inner {
+   
+        padding: 0;
+
+    }
+
+    ion-label {
+        margin-right: 0;
+    }
+}
+
+
+}

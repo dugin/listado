@@ -1,0 +1,71 @@
+<!--
+  Generated template for the DetailsContactsPage page.
+
+  See http://ionicframework.com/docs/v2/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Detalhes</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content class="details-contacts" >
+
+  
+
+  <ion-card>
+  <ion-card-header>
+       <b  *ngIf="contact.name">  <span *ngIf="contact.name.formatted">{{contact.name.formatted}}  </span></b> 
+  </ion-card-header>
+
+  <ion-list *ngFor="let number of contact.phoneNumbers">
+   <ion-item >
+
+<div class="texto"> 
+         <p>    {{number.type}} </p>
+   <h3 > <b>{{number.value}} </b></h3>
+   </div>
+
+ <div class="botoes">
+  <div class="item"> 
+      <button ion-button icon-only clear color="danger" (click) = "copyToClipboard(number.value)">
+          <ion-icon name="copy" large></ion-icon>
+            </button>
+              <span class="caption">Copiar</span>
+  </div>
+
+  <div class="item"> 
+             <button ion-button icon-only clear color="danger"  (click) = "callNumber(number.value)">
+      <ion-icon name="call" large></ion-icon>
+        
+    
+         </button>
+           <span class="caption">Ligar</span>
+
+         </div>
+
+<div class="item"> 
+               <button ion-button icon-only clear color="danger"  (click) = "sendViaWhatsapp(number.value, contact)">
+      <ion-icon name="logo-whatsapp" large></ion-icon>
+        
+    
+         </button>
+           <span class="caption">Whatsapp</span>
+        
+        </div>
+     </div>
+
+
+  
+  </ion-item>
+
+    
+
+  </ion-list>
+</ion-card>
+
+</ion-content>
