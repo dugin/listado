@@ -1,82 +1,50 @@
-<ion-header>
-  <ion-navbar>
-    <ion-title>
-     Listado
-    </ion-title>
-  </ion-navbar>
-</ion-header>
-
-<ion-content padding class="location">
-
-
-
-   <img id="pin" src="assets/images/ic_person_pin_circle_black_48px.svg"> 
-  <h4 id="state_question"> Em que estado você mora? </h4> 
-
-  <button ion-button id=myLocation (click)="setMyLocation()" block color="danger" outline>
-   <ion-icon name="navigate"></ion-icon>
+<ion-content class="location">
+  <img id="pin" src="assets/icon/logo_icon.svg">
+  <h1 class="app_name"> Listado</h1>
+  <h5 class="state_question"> Em que estado você mora ? </h5>
+  <button ion-button class="my_location_btn" (click)="setMyLocation()" block color="accent"  round>
+  <img id="location_icon" src="assets/images/location_icon.svg">
    Minha Localização
-   </button> 
+   </button>
 
-<div id="resto" >
-<div id="or">
-  <span >
-    ou <!--Padding is optional-->
-  </span>
-</div  >
-
-<ion-item>
-  <ion-label style="color:black; font-size: 14px;">Selecione o Estado</ion-label> 
-  <ion-select [(ngModel)]="estado" (ngModelChange)="onChange($event)">
-    <ion-option value="Acre / AC" >Acre</ion-option>
-    <ion-option value="Alagoas / AL">Alagoas</ion-option>
-    <ion-option value="Amapá / AP">Amapá</ion-option>
-    <ion-option value="Amazonas / AM" >Amazonas</ion-option>
-    <ion-option value="Bahia / BA">Bahia</ion-option>
-     <ion-option value="Ceará / CE" >Ceará</ion-option>
-    <ion-option value="Distrito Federal / DF">Distrito Federal </ion-option>
-    <ion-option value="Espírito Santo / ES" >Espírito Santo</ion-option>
-    <ion-option value="Goiás / GO">Goiás</ion-option>
-     <ion-option value="Maranhão / MA" >Maranhão</ion-option>
-    <ion-option value="Mato Grosso / MT">Mato Grosso</ion-option>
-    <ion-option value="Mato Grosso do Sul / MS" >Mato Grosso do Sul </ion-option>
-    <ion-option value="Pará / PA">Pará</ion-option>
-     <ion-option value="Paraíba / PB" >Paraíba</ion-option>
-    <ion-option value="Paraná / PR">Paraná</ion-option>
-    <ion-option value="Pernambuco / PE" >Pernambuco</ion-option>
-    <ion-option value="Piauí / PI">Piauí</ion-option>
-     <ion-option value="Rio de Janeiro / RJ" >Rio de Janeiro </ion-option>
-    <ion-option value="Rio Grande do Norte / RN">Rio Grande do Norte</ion-option>
-    <ion-option value="Rio Grande do Sul / RS" >Rio Grande do Sul</ion-option>
-    <ion-option value="Rondônia / RO">Rondônia</ion-option>
-     <ion-option value="Roraima / RR" >Roraima</ion-option>
-    <ion-option value="Santa Catarina / SC">Santa Catarina</ion-option>
-    <ion-option value="São Paulo / SP" >São Paulo</ion-option>
-    <ion-option value="Sergipe / SE">Sergipe</ion-option>
-     <ion-option value="Tocantins / TO" >Tocantins</ion-option>
-    
-  </ion-select>
-
-
-</ion-item>
-
-</div>
-
-<h3 id="cidade"> {{estado}}</h3> 
-
-
-      <ion-spinner *ngIf="loading" name="dots"></ion-spinner> 
-   
-
- 
-
-     
-         
-<button ion-button  *ngIf="next" id="btn_avancar" (click)="nextPage()" block color="danger" >
-   Avançar
-   </button>  
-        
+   <p class="or"> ou</p>
   
-
-
+    <ion-item class="state_select">
+      <ion-label [style.overflow]="estado == null? 'visible' : 'hidden'">Selecione o Estado</ion-label>
+      <ion-select [(ngModel)]="estado" (ngModelChange)="onChange($event)">
+        <ion-option value="Acre / AC">Acre</ion-option>
+        <ion-option value="Alagoas / AL">Alagoas</ion-option>
+        <ion-option value="Amapá / AP">Amapá</ion-option>
+        <ion-option value="Amazonas / AM">Amazonas</ion-option>
+        <ion-option value="Bahia / BA">Bahia</ion-option>
+        <ion-option value="Ceará / CE">Ceará</ion-option>
+        <ion-option value="Distrito Federal / DF">Distrito Federal </ion-option>
+        <ion-option value="Espírito Santo / ES">Espírito Santo</ion-option>
+        <ion-option value="Goiás / GO">Goiás</ion-option>
+        <ion-option value="Maranhão / MA">Maranhão</ion-option>
+        <ion-option value="Mato Grosso / MT">Mato Grosso</ion-option>
+        <ion-option value="Mato Grosso do Sul / MS">Mato Grosso do Sul </ion-option>
+        <ion-option value="Pará / PA">Pará</ion-option>
+        <ion-option value="Paraíba / PB">Paraíba</ion-option>
+        <ion-option value="Paraná / PR">Paraná</ion-option>
+        <ion-option value="Pernambuco / PE">Pernambuco</ion-option>
+        <ion-option value="Piauí / PI">Piauí</ion-option>
+        <ion-option value="Rio de Janeiro / RJ">Rio de Janeiro </ion-option>
+        <ion-option value="Rio Grande do Norte / RN">Rio Grande do Norte</ion-option>
+        <ion-option value="Rio Grande do Sul / RS">Rio Grande do Sul</ion-option>
+        <ion-option value="Rondônia / RO">Rondônia</ion-option>
+        <ion-option value="Roraima / RR">Roraima</ion-option>
+        <ion-option value="Santa Catarina / SC">Santa Catarina</ion-option>
+        <ion-option value="São Paulo / SP">São Paulo</ion-option>
+        <ion-option value="Sergipe / SE">Sergipe</ion-option>
+        <ion-option value="Tocantins / TO">Tocantins</ion-option>
+      </ion-select>
+    </ion-item>
+  
+  <h3 id="cidade"> {{estado }}</h3>
+  <ion-spinner *ngIf="loading" name="dots"></ion-spinner>
+  <button ion-button *ngIf="next" id="btn_avancar" (click)="nextPage()" round >
+   
+   Avançar
+   </button>
 </ion-content>

@@ -7,6 +7,7 @@ import { OptionsPage } from '../options/options';
 import { DetailsContactsPage } from '../details-contacts/details-contacts';
 import { DomSanitizer } from '@angular/platform-browser';
 import { StateUtil } from '../../util/state-util';
+
 /*
   Generated class for the ListContactsPage page.
 
@@ -44,15 +45,21 @@ export class ListContactsPage {
     this.loading = true;
     this.list_index_visibility = 'hidden';
 
+  
+    
 
-    if (navParams.data != null)
+
+    if (navParams.get('city') != null)
       this.arrangeContacts(navParams.get('city'));
 
 
     else {
+          console.log('ListContactsPage else!! ');
 
       NativeStorage.getItem('state').then(
         data => {
+
+            console.log('ListContactsPage: '+data.property);
 
           this.arrangeContacts(data.property);
         },
@@ -72,8 +79,18 @@ export class ListContactsPage {
 
   }
 
+  test(event : HammerInput){
+
+    
+
+   console.log(event.type);
+   
+
+  }
 
   gotoList(index) {
+
+    
 
     let move: number;
     let x = this.content.getContentDimensions().scrollHeight / this.itensCount[this.itensCount.length - 1]
@@ -115,7 +132,7 @@ export class ListContactsPage {
       return this.sanitizer.bypassSecurityTrustUrl(photo);
     }
 
-    return 'assets/images/person_avatar.png';
+    return 'assets/icon/contact_icon.svg';
 
 
   }

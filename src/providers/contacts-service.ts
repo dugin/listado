@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Contacts, Contact } from 'ionic-native';
+import { Contacts, Contact, ContactFieldType } from 'ionic-native';
 import { CityToStateUtil } from '../util/city-to-state-util';
 
 declare var google: any;
@@ -19,7 +19,9 @@ export class ContactsService {
 
     return new Promise((resolve, reject) => {
 
-      Contacts.find(['*']).then((contacts: Contact[]) => {
+     var filter :ContactFieldType[] = ["displayName", "addresses", "phoneNumbers"];
+
+      Contacts.find(filter).then((contacts: Contact[]) => {
 
         ContactsService.lstFiveCts = Promise.resolve(this.setLastContacts(contacts, 10));
 

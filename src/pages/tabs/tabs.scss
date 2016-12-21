@@ -1,0 +1,24 @@
+.tabs {
+    
+
+    .ion-md-contact_icon,
+     .ion-ios-contact_icon  {
+content: url("../assets/icon/contact_icon.svg");
+
+   height: 36px;
+    padding: 4px 0 0 0;
+  opacity: 0.4;
+}
+
+
+ .ion-md-last_contacts, 
+ .ion-ios-last_contacts{
+content: url("../assets/icon/last_contacts_icon.svg");
+ 
+ height: 36px;
+    padding: 4px 0 0 0;
+  opacity: 0.4;
+}
+
+  
+}

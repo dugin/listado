@@ -9,7 +9,7 @@ import { LocationPage } from '../pages/location/location';
 import { OptionsPage } from '../pages/options/options';
 import {ContactsService } from '../providers/contacts-service';
 import {LocationService } from '../providers/location-service';
-
+import {HammerGesturesDirective} from '../directives/gesture'
 
 @NgModule({
   declarations: [
@@ -20,12 +20,13 @@ import {LocationService } from '../providers/location-service';
     TabsPage,
     OptionsPage,
     DetailsContactsPage,
+    HammerGesturesDirective
     
   ],
   imports: [
     IonicModule.forRoot(MyApp, {tabsHideOnSubPages:"true", platforms: {
     android: {
-      tabsPlacement: 'top'
+      tabsPlacement: 'bottom'
     },
     ios: {
       tabsPlacement: 'bottom',

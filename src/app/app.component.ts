@@ -17,7 +17,8 @@ export class MyApp {
 
     platform.ready().then(() => {
 
-     
+      this.setStatusBar();
+
       this.hideSplashScreen();
 
 
@@ -28,7 +29,7 @@ export class MyApp {
         error => {
           console.log(error);
 
-       
+
           this.rootPage = LocationPage;
         });
 
@@ -43,6 +44,12 @@ export class MyApp {
     });
   }
 
+  setStatusBar() {
+
+       StatusBar.overlaysWebView(true); // let status bar overlay webview
+     StatusBar.backgroundColorByHexString('#054160'); // set status bar to white
+     
+    } 
 
 
   hideSplashScreen() {

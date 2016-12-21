@@ -5,22 +5,43 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-
   <ion-navbar>
-    <ion-buttons end>
-      <button ion-button (click)="presentOptions($event)">
-        <ion-icon name="options"></ion-icon>
+   
+   
+    
+     
+       <img class="logo_icon" src="assets/icon/logo_icon.svg" height="30px" />
+     <h5 class="title">Listado </h5>
+     
+   
+  
+      <button class="menu" ion-button clear (click)="presentOptions($event)">
+       <img src="assets/icon/menu_icon.svg" height="30px"  />
       </button>
-    </ion-buttons>
-    <ion-title class="title">Listado</ion-title>
+   
+    
+  
+  <div class="search_container">
+   
+     <ion-searchbar  color="primary" autofocus (ionInput)="getItems($event)" placeholder="Procurar por contato">
+   
+    </ion-searchbar>
+ 
+ <span class="or"> ou </span>
+
+    <ion-item  class="state">
+      <ion-label>Estado</ion-label>
+       <ion-select >
+           <ion-option  *ngFor="let letter of alphabet | async;" [value]="letter">{{letter}}</ion-option>
+             </ion-select>
+    </ion-item>
+ 
+</div>
+   
+
   </ion-navbar>
-
 </ion-header>
-
-
-
 <ion-content class="list-contacts" padding-bottom>
-
   <!--
    <button (click)="savefn()">Add Contact</button>
    <ion-input type="text" [(ngModel)]="contacttobefound" placeholder="Enter display name"></ion-input>
@@ -30,40 +51,27 @@
            {{item.displayName}}
        </ion-item>
    </ion-list> -->
-
   <div class="spinner">
-       <ion-spinner *ngIf="loading" name="dots"></ion-spinner>
+    <ion-spinner *ngIf="loading" name="dots"></ion-spinner>
+    <h3 *ngIf="noContact"> Nenhum Contato </h3>
+  </div>
+  <ion-item-group *ngFor="let group of groupedContacts" class="alpha_list">
+    <ion-item-divider light>{{group.letter}}</ion-item-divider>
+    <button ion-item detail-none *ngFor="let contact of group.contacts" (click)='selectContact(contact)'>
 
-       <h3 *ngIf="noContact"> Nenhum Contato </h3>
-      </div>
-
-
-
-<ion-item-group *ngFor="let group of groupedContacts" class="alpha_list">
- 
-      <ion-item-divider light>{{group.letter}}</ion-item-divider>
-      <button ion-item  *ngFor="let contact of group.contacts" (click)='selectContact(contact)' >
-
-       <ion-avatar item-left>
-      <img [src]=getImgSanatized(contact) /> 
+       <ion-avatar  item-left>
+      <img  [style.padding]="contact.photos != null? '10px' : '0' " [src]=getImgSanatized(contact) /> 
     </ion-avatar>  
     
           <span  *ngIf="contact.name">  <span *ngIf="contact.name.formatted">    {{contact.name.formatted}} </span> </span>
        </button>
- 
-    </ion-item-group>
-
- 
+  </ion-item-group>
 </ion-content>
 
-
- <ul [style.top]="isIOS ?  '58px' : '120px'" [style.visibility]="list_index_visibility" class="alpha_sidebar">
-    
-      <li (click)="gotoList(i)"   *ngFor="let letter of alphabet | async; let i = index; let last = last"> 
-          
-          <button ion-button  small clear [style.height]= "list_index_margin + 'px'" >{{letter}}</button>
-      </li>
-    </ul>
-
-
- 
+<!--
+<ul [style.top]="isIOS ?  '58px' : '120px'" [style.visibility]="list_index_visibility" class="alpha_sidebar" (pan)="test($event)">
+  <li (click)="gotoList(i)" *ngFor="let letter of alphabet | async; let i = index; let last = last">
+    <button ion-button small clear [style.height]="list_index_margin + 'px'">{{letter}}</button>
+  </li>
+</ul>
+ -->

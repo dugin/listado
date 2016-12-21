@@ -5,7 +5,8 @@ import {LastContactsPage} from '../last-contacts/last-contacts';
 import { NavParams } from 'ionic-angular';
 
 @Component({
-  templateUrl: 'tabs.html'
+  templateUrl: 'tabs.html',
+   selector: 'tabs',
 })
 export class TabsPage {
 
