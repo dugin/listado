@@ -10,8 +10,8 @@
    <p class="or"> ou</p>
   
     <ion-item class="state_select">
-      <ion-label [style.overflow]="estado == null? 'visible' : 'hidden'">Selecione o Estado</ion-label>
-      <ion-select [(ngModel)]="estado" (ngModelChange)="onChange($event)">
+      <ion-label [style.overflow]="stateSelector == null? 'visible' : 'hidden'">Selecione o Estado</ion-label>
+      <ion-select [(ngModel)]="stateSelector" (ngModelChange)="onChange($event)">
         <ion-option value="Acre / AC">Acre</ion-option>
         <ion-option value="Alagoas / AL">Alagoas</ion-option>
         <ion-option value="Amapá / AP">Amapá</ion-option>
@@ -41,7 +41,7 @@
       </ion-select>
     </ion-item>
   
-  <h3 id="cidade"> {{estado }}</h3>
+  <h3 id="cidade" *ngIf="estado.state.length > 0"> {{estado.state }}  -  {{estado.state_short }} </h3>
   <ion-spinner *ngIf="loading" name="dots"></ion-spinner>
   <button ion-button *ngIf="next" id="btn_avancar" (click)="nextPage()" round >
    

@@ -5,6 +5,8 @@ import { LoadingController, Loading } from 'ionic-angular';
 import { TabsPage } from '../tabs/tabs';
 import { NativeStorage } from 'ionic-native';
 import { PermissionsUtil } from '../../util/permissions-util';
+import { StateModel } from '../../model/state-model'
+
 
 @Component({
   selector: 'location',
@@ -15,32 +17,44 @@ export class LocationPage {
 
 
   loader: Loading;
-  estado: string;
+  estado: StateModel = new StateModel('', '');
   loading: boolean;
+  stateSelector: string;
   next: boolean;
 
-  constructor(public alertCtrl: AlertController, public navCtrl: NavController, public viewCtrl: ViewController, public locationService: LocationService,
+  constructor(public alertCtrl: AlertController,
+    public navCtrl: NavController,
+    public viewCtrl: ViewController,
+    public locationService: LocationService,
     public loadingCtrl: LoadingController) {
-    console.log("LocationPage constructor ");
-
-
-
   }
 
 
   onChange(changes) {
 
-    this.next = changes != null;
+   
 
+    this.next = changes != null;
+    this.concatStateSelector(changes);
 
   }
 
 
+private concatStateSelector(changes){
+      this.estado.state = changes.substring(0,this.stateSelector.indexOf('/')-1);
+      this.estado.state_short = changes.substring(this.stateSelector.indexOf('/')+1);
+
+}
+
+
+
   setMyLocation() {
 
-    this.estado = "";
+
 
     this.next = false;
+    this.stateSelector = null;
+    this.estado = new StateModel('', '');
 
 
     PermissionsUtil.checkLocationPermission().then(permissionType => {
@@ -65,9 +79,7 @@ export class LocationPage {
 
 
   nextPage() {
-     this.navCtrl.setRoot(TabsPage, {
-        city: this.estado
-      });
+
 
 
     PermissionsUtil.checkContactPermission().then(permissionType => {
@@ -87,7 +99,10 @@ export class LocationPage {
   }
 
   persistMyState() {
-    NativeStorage.setItem('state', { property: this.estado })
+    NativeStorage.setItem('state', {
+      state: this.estado.state,
+      state_short: this.estado.state_short
+    })
       .then(
       () => console.log('Stored item!'),
       error => console.error('Error storing item', error)

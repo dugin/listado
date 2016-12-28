@@ -7,6 +7,9 @@ import { OptionsPage } from '../options/options';
 import { DetailsContactsPage } from '../details-contacts/details-contacts';
 import { DomSanitizer } from '@angular/platform-browser';
 import { StateUtil } from '../../util/state-util';
+import { StateModel } from '../../model/state-model'
+import { ContactModel } from '../../model/contact-model'
+import _ from "lodash";
 
 /*
   Generated class for the ListContactsPage page.
@@ -32,6 +35,12 @@ export class ListContactsPage {
   list_index_visibility: any;
   itensCount = new Array<number>();
 
+  stateSelector;
+
+  contacts = new Array<ContactModel>();
+  contactsTemp = new Array<ContactModel>();
+  contactsMap = new Map<string, ContactModel[]>();
+
 
   constructor(public sanitizer: DomSanitizer,
     public popoverCtrl: PopoverController,
@@ -41,12 +50,12 @@ export class ListContactsPage {
     public contactsService: ContactsService,
     public navParams: NavParams) {
 
-   
+
     this.loading = true;
     this.list_index_visibility = 'hidden';
 
-  
-    
+
+
 
 
     if (navParams.get('city') != null)
@@ -54,24 +63,24 @@ export class ListContactsPage {
 
 
     else {
-          console.log('ListContactsPage else!! ');
+      console.log('ListContactsPage else!! ');
 
       NativeStorage.getItem('state').then(
         data => {
 
-            console.log('ListContactsPage: '+data.property);
+          console.log('ListContactsPage: ' + data.state);
 
-          this.arrangeContacts(data.property);
+          this.arrangeContacts(new StateModel(data.state, data.state_short));
         },
 
-        error => { console.error('Nao é pra dar erro aqui: '+error) }
+        error => { console.error('Nao é pra dar erro aqui: ' + error) }
       );
     }
   }
 
-  arrangeContacts(myState: string) {
+  arrangeContacts(myState: StateModel) {
 
-    this.contactsService.arrangeContacts(myState).then((contactStruct: { [key: string]: Contact[]; }) => {
+    this.contactsService.arrangeContacts(myState).then((contactStruct: { [key: string]: ContactModel[]; }) => {
 
       this.groupContacts(contactStruct);
       this.enableLastContactTab()
@@ -79,38 +88,34 @@ export class ListContactsPage {
 
   }
 
-  test(event : HammerInput){
 
-    
+  onChange(event: string) {
 
-   console.log(event.type);
-   
+    console.log(event);
+
+
+    if (event.localeCompare('TODOS') == 0)
+      this.resetContacts();
+
+    else if (event.localeCompare('OUTROS PAÍSES') == 0)
+
+      this.contacts =_.cloneDeep(this.contactsMap.get('##'));
+
+
+
+    else
+      this.contacts = _.cloneDeep( this.contactsMap.get(event));
+
+
+
+
+
 
   }
 
-  gotoList(index) {
+  private resetContacts() {
 
-    
-
-    let move: number;
-    let x = this.content.getContentDimensions().scrollHeight / this.itensCount[this.itensCount.length - 1]
-
-    if (index == 0) {
-
-      this.content.scrollTo(0, 2)
-
-    }
-
-
-    else {
-      move = this.itensCount[index - 1] * x;
-
-
-      this.content.scrollTo(0, move);
-
-    }
-
-
+    this.contacts = _.cloneDeep(this.contactsTemp);
 
 
   }
@@ -125,6 +130,7 @@ export class ListContactsPage {
 
 
   getImgSanatized(contact: Contact): any {
+
 
     if (contact.photos != null) {
       let photo = contact.photos[0].value;
@@ -146,13 +152,13 @@ export class ListContactsPage {
 
   }
 
-  groupContacts(contactStruct: { [key: string]: Contact[]; }) {
+  groupContacts(contactStruct: { [key: string]: ContactModel[]; }) {
 
 
 
     let arr = new Array<string>();
 
-    let totalItens = 0;
+
 
     if (Object.keys(contactStruct).length === 0)
       this.noContact = true;
@@ -167,36 +173,36 @@ export class ListContactsPage {
 
           if (contactStruct[State[state]] != null) {
 
-            totalItens += contactStruct[State[state]].length + 1;
-            this.itensCount.push(totalItens);
+            if (State[state].localeCompare('##') == 0)
+              arr.push('OUTROS PAÍSES');
+            else
+              arr.push(State[state]);
 
 
-            arr.push(State[state]);
-
-
-            let sortedContacts = contactStruct[State[state]].sort((a: Contact, b: Contact) => {
-              if (a.name != null && b.name != null)
-                if (a.name.formatted != null && b.name.formatted != null)
-                  return a.name.formatted.localeCompare(b.name.formatted);
+            let sortedContacts = contactStruct[State[state]].sort((a: ContactModel, b: ContactModel) => {
+              if (a.contact.name != null && b.contact.name != null)
+                if (a.contact.name.formatted != null && b.contact.name.formatted != null)
+                  return a.contact.name.formatted.localeCompare(b.contact.name.formatted);
 
               return -1;
 
             });
 
+            this.contactsTemp  = this.contactsTemp.concat(sortedContacts);
+            this.contacts = this.contacts.concat(sortedContacts);
 
+            this.resetContacts();
 
-            let newGroup = {
-              letter: StateUtil.stateShortToFull(State[state]),
-              contacts: sortedContacts
-            };
+            this.contactsMap.set(State[state], sortedContacts)
 
-            this.groupedContacts.push(newGroup);
           }
 
 
         };
       }
-    this.dynamicallyChangeCSS(arr);
+
+    arr.unshift('TODOS')
+
     this.alphabet = Promise.resolve(arr);
 
     this.loading = false;
@@ -206,48 +212,53 @@ export class ListContactsPage {
 
   }
 
+  getItems(ev: any) {
+    // Reset items back to all of the items
+    this.resetContacts();
 
+    // set val to the value of the searchbar
+    let val = ev.target.value;
 
-  dynamicallyChangeCSS(indexArray: Array<string>) {
-
-    this.list_index_visibility = 'visible';
-
-    let height = this.content.getContentDimensions().scrollHeight / indexArray.length;
-
-    if (this.platform.is('ios'))
-      this.list_index_margin = height;
-
-    else
-      this.list_index_margin = height - 2.5;
-
-
+    // if the value is an empty string don't filter the items
+    if (val && val.trim() != '') {
+      this.contacts = this.contacts.filter((item) => {
+        return (item.contact.name.formatted.toLowerCase().indexOf(val.toLowerCase()) > -1);
+      })
+    }
   }
 
+  myHeaderFn(record: ContactModel, recordIndex: number, records: ContactModel[]) {
+
+    if (records != null) {
+      if (records.length > 0) {
+
+        if (recordIndex == 0)
+          return records[0].state.state;
+
+        else
+          return records[recordIndex - 1].state.state.localeCompare(records[recordIndex].state.state) != 0 ? records[recordIndex].state.state : null;
+
+
+
+      }
+    }
+
+
+
+    return null;
+  }
+
+
+
+
   presentOptions(myEvent) {
-    let popover = this.popoverCtrl.create(OptionsPage, {viewCtrl: this.viewCtrl});
+    let popover = this.popoverCtrl.create(OptionsPage, { viewCtrl: this.viewCtrl });
     popover.present({
 
       ev: myEvent
 
     });
-   
-  }
 
-
-  savefn() {
-    // this.navCtrl.push(AddcontactPage);
-  }
-
-  findfn(val) {  /* 
-      Contacts.find(['*'], {filter: val}).then((contacts) => {
-          this.contactsfound = contacts;
-         console.log(contacts[25]);
-         
-      })
-      
-      if(this.contactsfound.length == 0)
-      this.contactsfound.push({displayName: 'No Contacts found'});  
-      this.search = true;     */
   }
 
 }

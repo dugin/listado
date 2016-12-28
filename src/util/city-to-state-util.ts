@@ -1,16 +1,20 @@
 import { Contact } from 'ionic-native';
 import {StateUtil} from './state-util';
+import {ContactModel} from '../model/contact-model';
+import {StateModel} from '../model/state-model'
 
 export class CityToStateUtil {
 
-  static contactsStruct: { [key: string]: Contact[]; } = {};
+  static contactsStruct: { 
+    [key: string]: ContactModel[]; 
+  } = {};
 
 
 
-  public static rearrangeTelephoneNumbers(contact: Contact[], myState: string) {
+  public static rearrangeTelephoneNumbers(contact: Contact[], myState: StateModel) {
     CityToStateUtil.contactsStruct = {};
 
-    let resp: string;
+    let resp: StateModel;
 
     for (let i = 0; i < contact.length; i++) {
 
@@ -21,7 +25,6 @@ export class CityToStateUtil {
 
          let tel = contact[i].phoneNumbers[j].value.replace(/[^\d+]/g, '');
 
-          console.log(tel +' - '+contact[i].name.formatted);
           
 
           if (tel.length >= 8) {
@@ -37,7 +40,7 @@ export class CityToStateUtil {
                     resp = StateUtil.findStateFromTelephoneNumber(tel.substr(tel.indexOf('+') + 6, 2));
 
 
-                    this.initializeArray(contact[i], resp.substring(resp.length - 3));
+                    this.initializeArray(contact[i], resp);
                     break;
 
                   }
@@ -45,7 +48,7 @@ export class CityToStateUtil {
                     // Ex: +55021 xxxxx-xxxx
                     resp = StateUtil.findStateFromTelephoneNumber(tel.substr(tel.indexOf('+') + 4, 2));
 
-                    this.initializeArray(contact[i], resp.substring(resp.length - 3));
+                    this.initializeArray(contact[i], resp);
                     break;
                   }
 
@@ -63,7 +66,7 @@ export class CityToStateUtil {
                   // Ex: +5521 xxxxx-xxxx
                   resp = StateUtil.findStateFromTelephoneNumber(tel.substr(tel.indexOf('+') + 3, 2));
 
-                  this.initializeArray(contact[i], resp.substring(resp.length - 3));
+                  this.initializeArray(contact[i], resp);
                   break;
 
 
@@ -74,7 +77,7 @@ export class CityToStateUtil {
               }
               else {
                 // gringa
-                this.initializeArray(contact[i], "##");
+                this.initializeArray(contact[i], CityToStateUtil.setOtherCountries());
                 break;
 
               }
@@ -85,7 +88,7 @@ export class CityToStateUtil {
               if (tel.substr(0, 2).localeCompare("00") == 0) {
 
                 // Ex: 0047... gringa
-                this.initializeArray(contact[i], "##");
+                this.initializeArray(contact[i],  CityToStateUtil.setOtherCountries());
                 break;
 
               }
@@ -94,7 +97,7 @@ export class CityToStateUtil {
                 // Ex: 02121 xxxxx-xxxx
                 resp = StateUtil.findStateFromTelephoneNumber(tel.substr(3, 2));
 
-                this.initializeArray(contact[i], resp.substring(resp.length - 3));
+                this.initializeArray(contact[i], resp);
                 break;
 
               }
@@ -102,7 +105,7 @@ export class CityToStateUtil {
                 // Ex: 021 xxxxx-xxxx
                 resp = StateUtil.findStateFromTelephoneNumber(tel.substr(1, 2));
 
-                this.initializeArray(contact[i], resp.substring(resp.length - 3));
+                this.initializeArray(contact[i], resp);
                 break;
 
               }
@@ -123,7 +126,7 @@ export class CityToStateUtil {
               resp = StateUtil.findStateFromTelephoneNumber(tel.substr(0, 2));
 
 
-              this.initializeArray(contact[i], resp.substring(resp.length - 3));
+              this.initializeArray(contact[i], resp);
               break;
 
 
@@ -131,9 +134,8 @@ export class CityToStateUtil {
 
             else {
 
-               console.log('******* '+tel +' - '+contact[i].name.formatted+ ' *******');
               // o que sobrar é gringo
-              this.initializeArray(contact[i], "##");
+              this.initializeArray(contact[i], CityToStateUtil.setOtherCountries() );
 
               break;
 
@@ -147,16 +149,19 @@ export class CityToStateUtil {
   }
 
 
+  private static setOtherCountries(): StateModel{
+    return new StateModel('Outros Países','##');
 
+  }
 
-  private static initializeArray(c: Contact, est: string) {
+  private static initializeArray(c: Contact, est: StateModel) {
 
-    let e = est.replace(/ /g, '');
-
-    if (CityToStateUtil.contactsStruct[e] == null) 
-      CityToStateUtil.contactsStruct[e] = new Array<Contact>();
     
-      CityToStateUtil.contactsStruct[e].push(c)
+
+    if (CityToStateUtil.contactsStruct[est.state_short] == null) 
+      CityToStateUtil.contactsStruct[est.state_short] = new Array<ContactModel>();
+    
+      CityToStateUtil.contactsStruct[est.state_short].push(new ContactModel( c, est));
     
 
   }

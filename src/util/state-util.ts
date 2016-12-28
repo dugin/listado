@@ -1,8 +1,10 @@
+import {StateModel} from '../model/state-model';
+
 export class StateUtil {
 
 
 
-  public static findStateFromTelephoneNumber(ddd: string): string {
+  public static findStateFromTelephoneNumber(ddd: string): StateModel {
 
 
 
@@ -10,92 +12,92 @@ export class StateUtil {
     let dddNumber = Number.parseInt(ddd);
 
     if (dddNumber == 68)
-      return "Acre - AC";
+      return  new StateModel("Acre", "AC" ) ;
 
     else if (dddNumber == 82)
-      return "Alagoas - AL";
+      return new StateModel("Alagoas" , "AL");
 
     else if (dddNumber == 96)
-      return "Amapá - AP";
+      return new StateModel("Amapá","AP");
 
     else if (dddNumber == 92 || dddNumber == 97)
-      return "Amazonas - AM";
+      return new StateModel("Amazonas","AM");
 
     else if (dddNumber == 71 || (dddNumber > 72 && dddNumber < 76) || dddNumber == 77)
-      return "Bahia - BA";
+      return new StateModel("Bahia","BA");
 
     else if (dddNumber == 85 || dddNumber == 88)
-      return "Ceará - CE";
+      return new StateModel("Ceará","CE");
 
     else if (dddNumber == 27 || dddNumber == 28)
-      return "Espírito Santo - ES";
+      return new StateModel("Espírito Santo","ES");
 
     else if (dddNumber == 61 || dddNumber == 62 || dddNumber == 64)
-      return "Goiás - GO";
+      return new StateModel("Goiás","GO");
 
     else if (dddNumber == 98 || dddNumber == 99)
-      return "Maranhão - MA";
+      return new StateModel("Maranhão","MA");
 
     else if (dddNumber == 65 || dddNumber == 66)
-      return "Mato Grosso - MT";
+      return new StateModel("Mato Grosso","MT");
 
     else if (dddNumber == 67)
-      return "Mato Grosso do Sul - MS";
+      return new StateModel("Mato Grosso do Sul","MS");
 
 
     else if (dddNumber == 37 || (dddNumber > 30 && dddNumber < 36) || dddNumber == 38)
-      return "Minas Gerais - MG";
+      return new StateModel("Minas Gerais","MG");
 
     else if (dddNumber == 91 || dddNumber == 93 || dddNumber == 94)
-      return "Pará - PA";
+      return new StateModel("Pará","PA");
 
     else if (dddNumber == 83)
 
-      return "Paraíba - PB";
+      return new StateModel("Paraíba","PB");
 
     else if ((dddNumber > 40 && dddNumber < 47))
-      return "Paraná - PR";
+      return new StateModel("Paraná","PR");
 
     else if (dddNumber == 81 || dddNumber == 87)
-      return "Pernambuco - PE";
+      return new StateModel("Pernambuco","PE");
 
     else if (dddNumber == 86 || dddNumber == 89)
-      return "Piauí - PI";
+      return new StateModel("Piauí","PI");
 
     else if (dddNumber == 21 || dddNumber == 22 || dddNumber == 24)
-      return "Rio de Janeiro - RJ";
+      return new StateModel("Rio de Janeiro","RJ");
 
     else if (dddNumber == 84)
 
-      return "Rio Grande do Norte - RN";
+      return new StateModel("Rio Grande do Norte","RN");
 
     else if (dddNumber == 51 || (dddNumber > 52 && dddNumber < 56))
-      return "Rio Grande do Sul - RS";
+      return new StateModel("Rio Grande do Sul","RS");
 
     else if (dddNumber == 69)
 
-      return "Rondônia - RO";
+      return new StateModel("Rondônia","RO");
 
     else if (dddNumber == 95)
 
-      return "Roraima - RR";
+      return new StateModel("Roraima","RR");
 
     else if (dddNumber == 47 || dddNumber == 48 || dddNumber == 49)
-      return "Santa Catarina - SC";
+      return new StateModel("Santa Catarina", "SC");
 
 
     else if (dddNumber > 10 && dddNumber < 20)
-      return "São Paulo - SP";
+      return new StateModel("São Paulo", "SP");
 
     else if (dddNumber == 79)
 
-      return "Sergipe - SE";
+      return new StateModel("Sergipe", "SE");
 
     else if (dddNumber == 63)
 
-      return "Tocantins - TO";
+      return new StateModel("Tocantins" , "TO");
 
-    return "## - ##";
+    return new StateModel("Outros Países" , "##");
 
 
   }

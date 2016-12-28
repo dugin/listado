@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Contacts, Contact, ContactFieldType } from 'ionic-native';
 import { CityToStateUtil } from '../util/city-to-state-util';
+import {StateModel} from '../model/state-model';
+import {ContactModel} from '../model/contact-model';
 
-declare var google: any;
+
 
 @Injectable()
 export class ContactsService {
@@ -13,9 +15,9 @@ export class ContactsService {
 
 
 
-  arrangeContacts(estado: string): Promise<{ [key: string]: Contact[]; }> {
+  arrangeContacts(estado: StateModel): Promise<{ [key: string]: ContactModel[]; }> {
 
-    let est = estado.substring(estado.length - 3).replace(/ /g, '');;
+  
 
     return new Promise((resolve, reject) => {
 
@@ -26,7 +28,7 @@ export class ContactsService {
         ContactsService.lstFiveCts = Promise.resolve(this.setLastContacts(contacts, 10));
 
 
-        CityToStateUtil.rearrangeTelephoneNumbers(contacts, est);
+        CityToStateUtil.rearrangeTelephoneNumbers(contacts, estado);
 
         resolve(CityToStateUtil.contactsStruct);
 
